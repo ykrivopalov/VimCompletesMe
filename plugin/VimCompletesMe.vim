@@ -20,16 +20,16 @@ endif
 
 " Functions: {{{1
 function! s:vimCompletesMe(type)
-    let dirs = ["\<c-p>", "\<c-n>"]
+    let dirs = ["\<c-n>", "\<c-p>"]
     let dir = g:vcm_direction =~? '[nf]'
     let map = exists('b:vcm_tab_complete') ? b:vcm_tab_complete : ''
     let shift_exists = a:type ==? "shift_tab"
 
     if pumvisible()
         if shift_exists
-            return dirs[!dir]
-        else
             return dirs[dir]
+        else
+            return dirs[!dir]
         endif
     endif
 
@@ -41,25 +41,6 @@ function! s:vimCompletesMe(type)
         else
             return "\<tab>"
         endif
-    endif
-
-    let period = match(substr, '\.') != -1
-    if has('win32') || has('win64')
-        let file_pattern = match(substr, '\\') != -1
-    else
-        let file_pattern = match(substr, '\/') != -1
-    endif
-
-    if file_pattern
-        return "\<C-x>\<C-f>"
-    elseif period && (&omnifunc != '')
-        if get(b:, 'tab_complete_pos', []) == pos
-            let exp = "\<C-x>" . dirs[!dir]
-        else
-            let exp = "\<C-x>\<C-o>"
-        endif
-        let b:tab_complete_pos = pos
-        return exp
     endif
 
     if map ==? "user"
