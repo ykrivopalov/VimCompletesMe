@@ -9,29 +9,9 @@ if exists("g:loaded_VimCompletesMe") || v:version < 703 || &compatible
 endif
 let g:loaded_VimCompletesMe = 1
 
-" Options: {{{1
-if !exists('g:vcm_s_tab_behavior')
-    let g:vcm_s_tab_behavior = 0
-endif
-
-if !exists('g:vcm_direction')
-    let g:vcm_direction = 'n'
-endif
-
 " Functions: {{{1
 function! s:vimCompletesMe(type)
-    let dirs = ["\<c-n>", "\<c-p>"]
-    let dir = g:vcm_direction =~? '[nf]'
-    let map = exists('b:vcm_tab_complete') ? b:vcm_tab_complete : ''
     let shift_exists = a:type ==? "shift_tab"
-
-    if pumvisible()
-        if shift_exists
-            return dirs[dir]
-        else
-            return dirs[!dir]
-        endif
-    endif
 
     let pos = getpos('.')
     let substr = matchstr(strpart(getline(pos[1]), 0, pos[2]-1), "[^ \t]*$")
@@ -43,21 +23,14 @@ function! s:vimCompletesMe(type)
         endif
     endif
 
-    if map ==? "user"
-        return "\<C-x>\<C-u>"
-    elseif map ==? "tags"
-        return "\<C-x>\<C-]>"
-    elseif map ==? "omni"
-        return "\<C-x>\<C-o>"
-    elseif map ==? "dict"
-        return "\<C-x>\<C-k>"
-    elseif map ==? "vim"
-        return "\<C-x>\<C-v>"
+    if shift_exists
+        return "\<C-p>"
     else
-        return "\<C-x>" . dirs[!dir]
+        return "\<C-n>"
     endif
 endfunction
 
 " Maps: {{{1
 inoremap <expr> <Tab> <SID>vimCompletesMe("")
 inoremap <expr> <S-Tab> <SID>vimCompletesMe("shift_tab")
+inoremap
