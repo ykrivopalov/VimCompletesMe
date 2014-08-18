@@ -33,4 +33,3 @@ endfunction
 " Maps: {{{1
 inoremap <expr> <Tab> <SID>vimCompletesMe("")
 inoremap <expr> <S-Tab> <SID>vimCompletesMe("shift_tab")
-inoremap
